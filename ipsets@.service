@@ -1,0 +1,15 @@
+[Unit]
+Description=ipsets@%I
+Before=network-pre.target iptables.service ip6tables.service
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/bash /etc/systemd/system/ipsets@.service.d/ipsets.sh load %I
+ExecReload=/bin/bash /etc/systemd/system/ipsets@.service.d/ipsets.sh reload %I
+ExecStop=/bin/bash /etc/systemd/system/ipsets@.service.d/ipsets.sh unload %I
+
+[Install]
+WantedBy=multi-user.target
+
