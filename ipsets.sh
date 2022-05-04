@@ -82,7 +82,7 @@ reload_ipset() {
 
   for list_file in "${list_files[@]}"; do
     echo "$set_name: adding list file $list_file"
-    sed -e 's/^/add '"$set_name"' /' "$list_file" >> "$_tmpfile"
+    sed -e 's/#.*$//;/^\s*$/d;s/^/add '"$set_name"' /' "$list_file" >> "$_tmpfile"
   done
 
   ipset -f "$_tmpfile" restore
