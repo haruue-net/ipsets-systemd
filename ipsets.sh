@@ -14,7 +14,7 @@ set_name=""
 
 # the following variables should be set by the /etc/ipsets/*.conf file
 set_type="hash:net"
-set_family="inet"
+set_params=()
 list_files=()
 
 ipset() {
@@ -71,7 +71,11 @@ parse_config() {
 }
 
 load_ipset() {
-  ipset create "$set_name" "$set_type" family "$set_family"
+  local _ipset_create_params=("${set_params[@]}")
+  if [ -n "$set_family" ]; then
+    _ipset_create_params+=("family" "$set_family")
+  fi
+  ipset create "$set_name" "$set_type" "${_ipset_create_params[@]}"
   reload_ipset
 }
 
